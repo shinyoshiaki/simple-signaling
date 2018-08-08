@@ -50,7 +50,7 @@ export default class PortalNode {
       socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
         console.log(id2socketId, offerList, data.targetId);
         if (Object.keys(id2socketId).includes(data.targetId)) {
-          console.log("add answer", data.targetId);
+          console.log("add answer", data.targetId, id2socketId[data.targetId]);
           this.io.sockets.sockets[id2socketId[data.targetId]].emit(
             def.ANSER,
             data.sdp
