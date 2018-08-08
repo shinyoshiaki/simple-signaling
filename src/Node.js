@@ -53,13 +53,8 @@ export default class PortalNode {
           const socketId = id2socketId[data.targetId].toString();
           console.log("add answer", data.targetId, socketId);
 
+          console.log("sockets", this.io.sockets.sockets);
           this.io.sockets.sockets[socketId].emit(def.ANSER, data.sdp);
-          this.io.sockets.sockets(socketId).emit(def.ANSER, data.sdp);
-          if (socket.id === data.targetId) {
-            console.log("yes");
-            socket.emit(def.ANSER, data.sdp);
-          }
-          socket.broadcast();
 
           delete offerList[data.targetId];
           delete id2socketId[data.targetId];
