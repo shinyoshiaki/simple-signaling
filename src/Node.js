@@ -33,7 +33,7 @@ export default class PortalNode {
       });
 
       socket.on(def.OFFER, (data = { id: "", sdp: "" }) => {
-        console.log("add offer", data.id);
+        console.log("add offer", data.id, socket.id);
         offerList[data.id] = data.sdp;
         id2socketId[data.id] = socket.id;
       });
@@ -48,13 +48,15 @@ export default class PortalNode {
       });
 
       socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
-        console.log(id2socketId, offerList, data.targetId);
+        console.log(id2socketId, data.targetId);
         if (Object.keys(id2socketId).includes(data.targetId)) {
           console.log("add answer", data.targetId, id2socketId[data.targetId]);
+
           this.io.sockets.sockets[id2socketId[data.targetId]].emit(
             def.ANSER,
             data.sdp
           );
+
           delete offerList[data.targetId];
           delete id2socketId[data.targetId];
         }
