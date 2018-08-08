@@ -32,10 +32,11 @@ export default class PortalNode {
         }
       });
 
-      socket.on(def.OFFER, data => {
+      socket.on(def.OFFER, (data = { id: "", sdp: "" }) => {
         console.log("add offer", data.id);
         offerList[data.id] = data.sdp;
         id2socketId[data.id] = socket.id;
+        console.log("added offer", offerList, id2socketId);
       });
 
       socket.on(def.GET_OFFER, targetId => {
@@ -49,7 +50,7 @@ export default class PortalNode {
         }
       });
 
-      socket.on(def.ANSWER, data => {
+      socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
         console.log(id2socketId, offerList, data.targetId);
         if (Object.keys(id2socketId).includes(data.targetId)) {
           console.log("add answer", data.targetId);
