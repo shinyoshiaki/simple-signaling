@@ -7,7 +7,8 @@ const def = {
   CHECK_OFFER: "CHECK_OFFER",
   OFFER: "OFFER",
   ANSWER: "ANSWER",
-  GET_OFFER: "GET_OFFER"
+  GET_OFFER: "GET_OFFER",
+  ENTER: "ENTER"
 };
 
 const offerList = {},
@@ -23,6 +24,12 @@ export default class PortalNode {
 
     this.io.on("connection", socket => {
       console.log("connect", socket.id);
+
+      socket.on("enter", roomname => {
+        socket.join(roomname);
+        socket.roomname = roomname;
+        socket.to();
+      });
 
       socket.on(def.CHECK_OFFER, targetId => {
         if (Object.keys(offerList).includes(targetId)) {
@@ -49,11 +56,10 @@ export default class PortalNode {
 
       socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
         if (Object.keys(id2socketId).includes(data.targetId)) {
-          const socketId = id2socketId[data.targetId].toString();
+          const socketId = id2socketId[data.targetId];
           console.log("add answer", data.targetId, socketId);
 
-          this.io.sockets.sockets[socketId].emit(def.ANSER, data.sdp);
-          this.io.emit("test", data.targetId);
+          this.io.sockets.sockets[socketId].emit(def.ANSWER, data.sdp);
 
           delete offerList[data.targetId];
           delete id2socketId[data.targetId];
