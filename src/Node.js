@@ -23,6 +23,7 @@ export default class PortalNode {
 
     this.io.on("connection", socket => {
       console.log("connect", socket.id);
+
       socket.on(def.CHECK_OFFER, targetId => {
         if (Object.keys(offerList).includes(targetId)) {
           this.io.sockets.sockets[socket.id].emit(def.CHECK_OFFER, "exist");
@@ -30,11 +31,13 @@ export default class PortalNode {
           this.io.sockets.sockets[socket.id].emit(def.CHECK_OFFER, "un_exist");
         }
       });
+
       socket.on(def.OFFER, (data = { id: "", sdp: "" }) => {
         console.log("add offer", data.id);
         offerList[data.id] = data.sdp;
         id2socketId[data.id] = socket.id;
       });
+
       socket.on(def.GET_OFFER, targetId => {
         if (Object.keys(offerList).includes(targetId)) {
           this.io.sockets.sockets[socket.id].emit(
@@ -45,8 +48,9 @@ export default class PortalNode {
           delete id2socketId[targetId];
         }
       });
+      
       socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
-        console.log(id2socketId, data.targetId);
+        console.log(id2socketId, offerList, data.targetId);
         if (Object.keys(id2socketId).includes(data.targetId)) {
           console.log("add answer", data.targetId);
           this.io.sockets.sockets[id2socketId[data.targetId]].emit(
