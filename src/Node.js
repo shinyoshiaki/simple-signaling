@@ -35,8 +35,7 @@ export default class PortalNode {
       socket.on(def.OFFER, (data = { id: "", sdp: "" }) => {
         console.log("add offer", data.id);
         offerList[data.id] = data.sdp;
-        id2socketId[data.id] = socket.id;
-        console.log("added offer", offerList, id2socketId);
+        id2socketId[data.id] = socket.id;        
       });
 
       socket.on(def.GET_OFFER, targetId => {
@@ -45,8 +44,6 @@ export default class PortalNode {
             def.GET_OFFER,
             offerList[targetId]
           );
-          delete offerList[targetId];
-          delete id2socketId[targetId];
         }
       });
 
@@ -58,6 +55,8 @@ export default class PortalNode {
             def.ANSER,
             data.sdp
           );
+          delete offerList[targetId];
+          delete id2socketId[targetId];
         }
       });
     });
