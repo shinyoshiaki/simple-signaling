@@ -41,6 +41,8 @@ export default class PortalNode {
             def.GET_OFFER,
             offerList[targetId]
           );
+          delete offerList[targetId];
+          delete id2socketId[targetId];
         }
       });
       socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
