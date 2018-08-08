@@ -50,12 +50,10 @@ export default class PortalNode {
       socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
         console.log(id2socketId, data.targetId);
         if (Object.keys(id2socketId).includes(data.targetId)) {
-          console.log("add answer", data.targetId, id2socketId[data.targetId]);
+          const socketId = id2socketId[data.targetId].toString();
+          console.log("add answer", data.targetId, socketId);
 
-          this.io.sockets.sockets[id2socketId[data.targetId]].emit(
-            def.ANSER,
-            data.sdp
-          );
+          this.io.sockets.sockets[socketId].emit(def.ANSER, data.sdp);
 
           delete offerList[data.targetId];
           delete id2socketId[data.targetId];
