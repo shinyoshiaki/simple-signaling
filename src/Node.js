@@ -32,7 +32,7 @@ export default class PortalNode {
         }
       });
 
-      socket.on(def.OFFER, (data = { id: "", sdp: "" }) => {
+      socket.on(def.OFFER, data => {
         console.log("add offer", data.id);
         offerList[data.id] = data.sdp;
         id2socketId[data.id] = socket.id;
@@ -48,8 +48,8 @@ export default class PortalNode {
           delete id2socketId[targetId];
         }
       });
-      
-      socket.on(def.ANSWER, (data = { targetId: "", sdp: "" }) => {
+
+      socket.on(def.ANSWER, data => {
         console.log(id2socketId, offerList, data.targetId);
         if (Object.keys(id2socketId).includes(data.targetId)) {
           console.log("add answer", data.targetId);
