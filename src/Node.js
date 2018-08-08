@@ -54,6 +54,10 @@ export default class PortalNode {
           console.log("add answer", data.targetId, socketId);
 
           this.io.sockets.sockets[socketId].emit(def.ANSER, data.sdp);
+          if (socket.id === data.targetId) {
+            console.log("yes");
+            socket.emit(def.ANSER, data.sdp);
+          }
 
           delete offerList[data.targetId];
           delete id2socketId[data.targetId];
